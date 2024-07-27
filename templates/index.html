@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Generador de Arte</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #ffffff;
+        color: #333;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fafafa;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        text-align: center;
+        color: #4a4e69;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+      }
+      label {
+        font-size: 1.2em;
+        color: #22223b;
+      }
+      input,
+      select {
+        padding: 10px;
+        border: 1px solid #a4a2a3;
+        border-radius: 5px;
+        background-color: #f3edea;
+        font-size: 1em;
+        color: #333;
+        width: 100%;
+        max-width: 300px;
+      }
+      button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #d08273;
+        color: #fff;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      button:hover {
+        background-color: #f3ecf2;
+      }
+      .generated-image,
+      .processing-time,
+      .download-link {
+        text-align: center;
+        margin-top: 20px;
+      }
+      .download-link a {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #4a4e69;
+        color: #fff;
+        font-size: 1em;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+      }
+      .download-link a:hover {
+        background-color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Generador de Arte del estilo de tu artista preferido</h1>
+      <form action="/generate" method="post">
+        <label for="style">Selecciona tu estilo artístico preferido:</label>
+        <select id="style" name="style">
+          {% for estilo in estilos %}
+          <option value="{{ estilo }}">{{ estilo }}</option>
+          {% endfor %}
+        </select>
+        <label for="prompt">Describe la imagen que quieres generar:</label>
+        <input
+          type="text"
+          id="prompt"
+          name="prompt"
+          placeholder="Describe tu imagen..."
+          required
+        />
+        <button type="submit">Generar Imagen</button>
+      </form>
+      {% if imagen_generada %}
+      <div class="generated-image">
+        <h2>Imagen Generada</h2>
+        <img
+          src="data:image/png;base64,{{ imagen_generada }}"
+          alt="Imagen generada"
+        />
+      </div>
+      <div class="download-link">
+        <a
+          href="/download_image/?filepath={{ ruta_salida_imagen }}"
+          download="imagen_generada.png"
+          >Descargar Imagen</a
+        >
+      </div>
+      {% endif %} {% if tiempo_procesamiento %}
+      <div class="processing-time">
+        <p>Tiempo de procesamiento: {{ tiempo_procesamiento }} minutos</p>
+      </div>
+      {% endif %}
+    </div>
+  </body>
+</html>
